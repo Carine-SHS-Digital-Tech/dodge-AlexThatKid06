@@ -18,6 +18,11 @@ class FallingObject(pygame.sprite.Sprite):
     def setImage(self,graphicSelected):
         fallingObjectsImage = pygame.image.load(graphicSelected)
         self.image.blit(fallingObjectsImage,(0,0))
+
+    def moveFallingObjects(self,distance):
+        if self.rect.y <= 470:
+            self.rect.y = self.rect.y + distance
+
 pygame.init()                               # Pygame is initialised (starts running)
 
 screen = pygame.display.set_mode([700,500]) # Set the width and height of the screen [width,height]
@@ -43,6 +48,9 @@ while done == False:
 
     allFallingObjects.add(nextObject)
 
+    for eachObject in (allFallingObjects.sprites()):
+        eachObject.moveFallingObjects(5)
+
     screen.blit(background_image, [0,0])
     allFallingObjects.draw(screen)
     pygame.display.flip()
@@ -50,11 +58,7 @@ while done == False:
 
 pygame.quit
 
-    screen.blit(background_image, [0,0])
-    pygame.display.flip()                   # Go ahead and update the screen with what we've drawn.
-    clock.tick(20)                          # Limit to 20 frames per second
-
-pygame.quit()                               # Close the window and quit.
+                              # Close the window and quit.
 
 
 
