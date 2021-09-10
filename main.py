@@ -15,6 +15,16 @@ class FallingObject(pygame.sprite.Sprite):
         self.rect.x = random.randint(0, 670)
         self.rect.y = 0
 
+class Character(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.surface([50,68])
+        self.image.set_colorkey(black)
+
+        self.rect = self.image.get_rect()
+        self.rect.x = 310
+        self.rect.y = 420
+
     def setImage(self,graphicSelected):
         fallingObjectsImage = pygame.image.load(graphicSelected)
         self.image.blit(fallingObjectsImage,(0,0))
@@ -22,6 +32,9 @@ class FallingObject(pygame.sprite.Sprite):
     def moveFallingObjects(self,distance):
         if self.rect.y <= 470:
             self.rect.y = self.rect.y + distance
+    def deleteFallingObjects(self):
+        if self.rect.y > 470:
+            self.kill()
 
 pygame.init()                               # Pygame is initialised (starts running)
 
@@ -35,6 +48,8 @@ white    = ( 255, 255, 255)                 # used throughout the game instead o
 
 # Define additional Functions and Procedures here
 allFallingObjects = pygame.sprite.Group()
+
+nextApple = pygame.time.get_ticks() + 2500
 # -------- Main Program Loop -----------
 while done == False:
 
@@ -43,13 +58,16 @@ while done == False:
             done = True                     # Flag that we are done so we exit this loop
 
     # Update sprites here
-    nextObject = FallingObject()
-    nextObject.setImage("Apple.png")
-
-    allFallingObjects.add(nextObject)
+    if pygame.time.get_ticks() > nextApple:
+        nextObject = FallingObject()
+        nextObject.setImage("Apple.png")
+        allFallingObjects.add(nextObject)
+        nextApple = pygame.time.get_ticks() + 1500
 
     for eachObject in (allFallingObjects.sprites()):
         eachObject.moveFallingObjects(5)
+
+        eachObject.deleteFallingObjects()
 
     screen.blit(background_image, [0,0])
     allFallingObjects.draw(screen)
