@@ -25,6 +25,8 @@ class Character(pygame.sprite.Sprite):
         self.rect.x = 310
         self.rect.y = 420
 
+        self.image.blit(pygame.image.load("Superhero.png"),(0,0))
+
     def setImage(self,graphicSelected):
         fallingObjectsImage = pygame.image.load(graphicSelected)
         self.image.blit(fallingObjectsImage,(0,0))
@@ -49,6 +51,10 @@ white    = ( 255, 255, 255)                 # used throughout the game instead o
 # Define additional Functions and Procedures here
 allFallingObjects = pygame.sprite.Group()
 
+charactersGroup = pygame.sprite.Group()
+character = Character()
+charactersGroup.add(character)
+
 nextApple = pygame.time.get_ticks() + 2500
 # -------- Main Program Loop -----------
 while done == False:
@@ -71,6 +77,7 @@ while done == False:
 
     screen.blit(background_image, [0,0])
     allFallingObjects.draw(screen)
+    charactersGroup.draw(screen)
     pygame.display.flip()
     clock.tick(20)
 
