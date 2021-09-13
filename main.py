@@ -15,18 +15,6 @@ class FallingObject(pygame.sprite.Sprite):
         self.rect.x = random.randint(0, 670)
         self.rect.y = 0
 
-class Character(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.surface([50,68])
-        self.image.set_colorkey(black)
-
-        self.rect = self.image.get_rect()
-        self.rect.x = 310
-        self.rect.y = 420
-
-        self.image.blit(pygame.image.load("Superhero.png"),(0,0))
-
     def setImage(self,graphicSelected):
         fallingObjectsImage = pygame.image.load(graphicSelected)
         self.image.blit(fallingObjectsImage,(0,0))
@@ -37,6 +25,20 @@ class Character(pygame.sprite.Sprite):
     def deleteFallingObjects(self):
         if self.rect.y > 470:
             self.kill()
+
+class Character(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface([50,68])
+        self.image.set_colorkey(black)
+
+        self.rect = self.image.get_rect()
+        self.rect.x = 310
+        self.rect.y = 420
+
+        self.image.blit(pygame.image.load("Superhero.png"),(0,0))
+
+
 
 pygame.init()                               # Pygame is initialised (starts running)
 
