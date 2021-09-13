@@ -58,6 +58,7 @@ character = Character()
 charactersGroup.add(character)
 
 nextApple = pygame.time.get_ticks() + 2500
+movement = 0
 # -------- Main Program Loop -----------
 while done == False:
 
