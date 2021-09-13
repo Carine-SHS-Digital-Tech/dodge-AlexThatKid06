@@ -38,6 +38,14 @@ class Character(pygame.sprite.Sprite):
 
         self.image.blit(pygame.image.load("Superhero.png"),(0,0))
 
+    def moveCharacter(self,movement):
+        if self.rect.x >= 5 and self.rect.x <= 645:
+            self.rect.x + movement
+        if self.rect.x<5:
+            self.rect.x = 5
+        if self.rect.x>645:
+            self.rect.x = 645
+
 
 
 pygame.init()                               # Pygame is initialised (starts running)
@@ -58,13 +66,22 @@ character = Character()
 charactersGroup.add(character)
 
 nextApple = pygame.time.get_ticks() + 2500
+
 movement = 0
+
 # -------- Main Program Loop -----------
 while done == False:
 
     for event in pygame.event.get():        # Check for an event (mouse click, key press)
         if event.type == pygame.QUIT:       # If user clicked close window
             done = True                     # Flag that we are done so we exit this loop
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                movement = -5
+            if event.key == pygame.K_RIGHT:
+                movement = 5
+        if event.type == pygame.KEYUP:
+            movement = 0
 
     # Update sprites here
     if pygame.time.get_ticks() > nextApple:
@@ -77,6 +94,8 @@ while done == False:
         eachObject.moveFallingObjects(5)
 
         eachObject.deleteFallingObjects()
+
+    character.moveCharacter(movement)
 
     screen.blit(background_image, [0,0])
     allFallingObjects.draw(screen)
