@@ -103,8 +103,16 @@ while done == False:
         nextObject.setImage("Apple.png")
         allFallingObjects.add(nextObject)
         nextApple = pygame.time.get_ticks() + howmuchtime
-        if score == 3:
+        if score == 10:
+            howmuchtime = 2000
+        if score == 20:
+            howmuchtime = 1500
+        if score == 40:
+            howmuchtime = 1000
+        if score == 100:
             howmuchtime = 100
+        if score == 50:
+            howmuchtime = 200
 
     for eachObject in (allFallingObjects.sprites()):
         eachObject.moveFallingObjects(5)
