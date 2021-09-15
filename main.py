@@ -22,9 +22,13 @@ class FallingObject(pygame.sprite.Sprite):
     def moveFallingObjects(self,distance):
         if self.rect.y <= 470:
             self.rect.y = self.rect.y + distance
-    def deleteFallingObjects(self):
+    def deleteFallingObjects(self, oldscore):
         if self.rect.y > 470:
             self.kill()
+            newscore = oldscore + 1
+            return newscore
+        else:
+            return oldscore
 
 class Character(pygame.sprite.Sprite):
     def __init__(self):
@@ -40,7 +44,7 @@ class Character(pygame.sprite.Sprite):
 
     def moveCharacter(self,movement):
         if self.rect.x >= 5 and self.rect.x <= 645:
-            self.rect.x + movement
+            self.rect.x = self.rect.x + movement
         if self.rect.x<5:
             self.rect.x = 5
         if self.rect.x>645:
@@ -57,17 +61,20 @@ done = False                                # Loop until the user clicks the clo
 clock = pygame.time.Clock()                 # Used to manage how fast the screen updates
 black    = (   0,   0,   0)                 # Define some colors using rgb values.  These can be
 white    = ( 255, 255, 255)                 # used throughout the game instead of using rgb values.
+font = pygame.font.Font(None, 36)
 
 # Define additional Functions and Procedures here
-allFallingObjects = pygame.sprite.Group()
 
+allFallingObjects = pygame.sprite.Group()
+howmuchtime = 1000
 charactersGroup = pygame.sprite.Group()
 character = Character()
 charactersGroup.add(character)
-
-nextApple = pygame.time.get_ticks() + 2500
-
+score = 0
 movement = 0
+
+nextApple = pygame.time.get_ticks() + howmuchtime
+
 
 # -------- Main Program Loop -----------
 while done == False:
@@ -77,9 +84,16 @@ while done == False:
             done = True                     # Flag that we are done so we exit this loop
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                movement = -5
+                movement = -10
             if event.key == pygame.K_RIGHT:
-                movement = 5
+                movement = 10
+            if event.key == pygame.K_a:
+                movement = -999
+            if event.key == pygame.K_d:
+                movement = 999
+        if event.type == pygame.KEYUP:
+            movement = 0
+
         if event.type == pygame.KEYUP:
             movement = 0
 
@@ -88,18 +102,29 @@ while done == False:
         nextObject = FallingObject()
         nextObject.setImage("Apple.png")
         allFallingObjects.add(nextObject)
-        nextApple = pygame.time.get_ticks() + 1500
+        nextApple = pygame.time.get_ticks() + howmuchtime
+        if score == 3:
+            howmuchtime = 100
 
     for eachObject in (allFallingObjects.sprites()):
         eachObject.moveFallingObjects(5)
 
-        eachObject.deleteFallingObjects()
+
+        score = eachObject.deleteFallingObjects(score)
 
     character.moveCharacter(movement)
+
+    collisions = pygame.sprite.groupcollide(allFallingObjects, charactersGroup, False, False)
+    if len(collisions)>0:
+        done = True
+        print(f"you died, but your score = {score}")
+
 
     screen.blit(background_image, [0,0])
     allFallingObjects.draw(screen)
     charactersGroup.draw(screen)
+    textImg = font.render(str(score),1,white)
+    screen.blit( textImg, (10,10) )
     pygame.display.flip()
     clock.tick(20)
 
