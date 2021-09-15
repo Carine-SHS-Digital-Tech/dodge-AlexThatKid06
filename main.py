@@ -61,11 +61,11 @@ white    = ( 255, 255, 255)                 # used throughout the game instead o
 # Define additional Functions and Procedures here
 allFallingObjects = pygame.sprite.Group()
 
-nextApple = pygame.time.get_ticks() + 2500
-
 charactersGroup = pygame.sprite.Group()
 character = Character()
 charactersGroup.add(character)
+
+nextApple = pygame.time.get_ticks() + 2500
 
 movement = 0
 
