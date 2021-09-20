@@ -40,7 +40,7 @@ class Character(pygame.sprite.Sprite):
         self.rect.x = 310
         self.rect.y = 420
 
-        self.image.blit(pygame.image.load("Superhero.png"),(0,0))
+        self.image.blit(pygame.image.load("Steve.png"),(0,0))
 
     def moveCharacter(self,movement):
         if self.rect.x >= 5 and self.rect.x <= 645:
@@ -56,7 +56,7 @@ pygame.init()                               # Pygame is initialised (starts runn
 
 screen = pygame.display.set_mode([700,500]) # Set the width and height of the screen [width,height]
 pygame.display.set_caption("Dodge")       # Name your window
-background_image = pygame.image.load("OrchardBackground.jpg").convert()
+background_image = pygame.image.load("EnderDragon.png").convert()
 done = False                                # Loop until the user clicks the close button.
 clock = pygame.time.Clock()                 # Used to manage how fast the screen updates
 black    = (   0,   0,   0)                 # Define some colors using rgb values.  These can be
@@ -113,6 +113,7 @@ while done == False:
             howmuchtime = 100
         if score == 50:
             howmuchtime = 200
+        nextApple = pygame.time.get_ticks() + howmuchtime
 
     for eachObject in (allFallingObjects.sprites()):
         eachObject.moveFallingObjects(5)
