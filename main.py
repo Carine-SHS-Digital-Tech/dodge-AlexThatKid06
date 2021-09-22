@@ -2,6 +2,7 @@
 
 import pygame                   # Imports pygame and other libraries
 import random
+import time
 
 # Define Classes (sprites) here
 class FallingObject(pygame.sprite.Sprite):
@@ -22,6 +23,8 @@ class FallingObject(pygame.sprite.Sprite):
     def moveFallingObjects(self,distance):
         if self.rect.y <= 470:
             self.rect.y = self.rect.y + distance
+        if lives == 0:
+            self.rect.y = 470
     def deleteFallingObjects(self, oldscore):
         if self.rect.y > 470:
             self.kill()
@@ -61,6 +64,8 @@ done = False                                # Loop until the user clicks the clo
 clock = pygame.time.Clock()                 # Used to manage how fast the screen updates
 black    = (   0,   0,   0)                 # Define some colors using rgb values.  These can be
 white    = ( 255, 255, 255)                 # used throughout the game instead of using rgb values.
+red      = ( 255,   0,   0)
+orange   = ( 255, 165,   0)
 font = pygame.font.Font(None, 36)
 
 # Define additional Functions and Procedures here
@@ -70,8 +75,11 @@ howmuchtime = 1000
 charactersGroup = pygame.sprite.Group()
 character = Character()
 charactersGroup.add(character)
+lives = 3
 score = 0
 movement = 0
+msg = "Fireball Spam Now!"
+deathmsg = "You Died!"
 
 nextApple = pygame.time.get_ticks() + howmuchtime
 
@@ -100,7 +108,7 @@ while done == False:
     # Update sprites here
     if pygame.time.get_ticks() > nextApple:
         nextObject = FallingObject()
-        nextObject.setImage("Apple.png")
+        nextObject.setImage("EnderDragonFireBall.png")
         allFallingObjects.add(nextObject)
         nextApple = pygame.time.get_ticks() + howmuchtime
         if score == 50:
@@ -115,10 +123,13 @@ while done == False:
 
     character.moveCharacter(movement)
 
-    collisions = pygame.sprite.groupcollide(allFallingObjects, charactersGroup, False, False)
+    collisions = pygame.sprite.groupcollide(allFallingObjects, charactersGroup, True, False)
     if len(collisions)>0:
-        done = True
-        print(f"you died, but your score = {score}")
+        lives = lives - 1
+        if lives == 0:
+            done = True
+            print(f"you died but you achieved a score of {score}!")
+
 
 
     screen.blit(background_image, [0,0])
@@ -126,6 +137,15 @@ while done == False:
     charactersGroup.draw(screen)
     textImg = font.render(str(score),1,white)
     screen.blit( textImg, (10,10) )
+    textImg = font.render(str(lives),1,red)
+    screen.blit( textImg, (670,5) )
+    if score == 49:
+        textImg = font.render(msg,1,orange)
+        screen.blit( textImg, (450,250))
+    if lives == 0:
+        textImg = font.render(deathmsg,1,red)
+        screen.blit( textImg, (300,450))
+
     pygame.display.flip()
     clock.tick(20)
 
